@@ -1,0 +1,246 @@
+@import "tailwindcss";
+
+@theme {
+  /* Ivory/Warm color palette */
+  --color-primary-50: #fdf8f3;
+  --color-primary-100: #f9efe4;
+  --color-primary-200: #f3dcc8;
+  --color-primary-300: #e8c49e;
+  --color-primary-400: #d9a574;
+  --color-primary-500: #c98a52;
+  --color-primary-600: #b87344;
+  --color-primary-700: #985c3a;
+  --color-primary-800: #7b4c34;
+  --color-primary-900: #65402e;
+  
+  /* Accent colors */
+  --color-accent-500: #8b7355;
+  --color-accent-600: #725d44;
+}
+
+:root {
+  --foreground: #3d3225;
+  --background: #faf7f2;
+  --ivory-50: #fffdf9;
+  --ivory-100: #faf7f2;
+  --ivory-200: #f5f0e6;
+  --ivory-300: #ebe4d6;
+  --ivory-400: #d9cfc0;
+  --ivory-500: #c4b8a5;
+  --ivory-600: #a89a84;
+  --ivory-700: #8a7c66;
+  --ivory-800: #6b5f4c;
+  --ivory-900: #4a4236;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  color: var(--foreground);
+  background: linear-gradient(135deg, var(--ivory-100) 0%, var(--ivory-200) 100%);
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Glassmorphism utilities - Light mode */
+.glass {
+  background: rgba(255, 253, 249, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(235, 228, 214, 0.6);
+  box-shadow: 0 4px 24px rgba(139, 115, 85, 0.08);
+}
+
+/* Custom scrollbar - Light theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ivory-200);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ivory-500);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ivory-600);
+}
+
+/* Typing animation */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.typing-cursor::after {
+  content: '▋';
+  animation: blink 1s infinite;
+  color: var(--color-primary-600);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #c98a52 0%, #8b7355 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Markdown styles for chat messages - Light mode */
+.markdown-content {
+  line-height: 1.7;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  color: var(--ivory-900);
+}
+
+.markdown-content h1 {
+  font-size: 1.5em;
+}
+
+.markdown-content h2 {
+  font-size: 1.3em;
+}
+
+.markdown-content h3 {
+  font-size: 1.15em;
+}
+
+.markdown-content h4 {
+  font-size: 1.05em;
+}
+
+.markdown-content p {
+  margin: 0.5em 0;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content li {
+  margin: 0.25em 0;
+}
+
+.markdown-content strong {
+  font-weight: 600;
+  color: var(--ivory-900);
+}
+
+.markdown-content em {
+  font-style: italic;
+}
+
+.markdown-content code {
+  background: var(--ivory-300);
+  color: var(--color-primary-700);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 0.9em;
+}
+
+.markdown-content pre {
+  background: var(--ivory-200);
+  border: 1px solid var(--ivory-400);
+  border-radius: 8px;
+  padding: 1em;
+  margin: 0.75em 0;
+  overflow-x: auto;
+}
+
+.markdown-content pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--ivory-800);
+}
+
+.markdown-content blockquote {
+  border-left: 3px solid var(--color-primary-500);
+  padding-left: 1em;
+  margin: 0.75em 0;
+  color: var(--ivory-700);
+  font-style: italic;
+}
+
+.markdown-content a {
+  color: var(--color-primary-600);
+  text-decoration: underline;
+}
+
+.markdown-content a:hover {
+  color: var(--color-primary-700);
+}
+
+.markdown-content hr {
+  border: none;
+  border-top: 1px solid var(--ivory-400);
+  margin: 1em 0;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid var(--ivory-400);
+  padding: 0.5em;
+  text-align: left;
+}
+
+.markdown-content th {
+  background: var(--ivory-300);
+  font-weight: 600;
+}
+
+/* Text color utilities for ivory theme */
+.text-ivory-primary {
+  color: var(--ivory-900);
+}
+
+.text-ivory-secondary {
+  color: var(--ivory-700);
+}
+
+.text-ivory-muted {
+  color: var(--ivory-600);
+}
