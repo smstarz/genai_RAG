@@ -1,7 +1,6 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { createClient, VercelKV } from '@vercel/kv';
 
-const SETTINGS_FILE = path.join(process.cwd(), 'data', 'settings.json');
+const SETTINGS_KEY = 'app:settings';
 
 export const DEFAULT_MODEL = 'gemini-3-flash-preview';
 
@@ -29,23 +28,56 @@ export interface Settings {
     model: string;
 }
 
-// 설정 파일 읽기
+// KV 클라이언트 (환경변수가 있을 때만 생성)
+let kv: VercelKV | null = null;
+
+function getKV(): VercelKV | null {
+    if (kv) return kv;
+    
+    if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+        kv = createClient({
+            url: process.env.KV_REST_API_URL,
+            token: process.env.KV_REST_API_TOKEN,
+        });
+    }
+    return kv;
+}
+
+// 설정 조회
 export async function getSettings(): Promise<Settings> {
+    const kvClient = getKV();
+    
+    if (!kvClient) {
+        console.log('[Settings] KV not configured, using defaults');
+        return DEFAULT_SETTINGS;
+    }
+
     try {
-        const data = await fs.readFile(SETTINGS_FILE, 'utf-8');
-        const parsed = JSON.parse(data);
-        return { ...DEFAULT_SETTINGS, ...parsed };
-    } catch {
+        const data = await kvClient.get<Settings>(SETTINGS_KEY);
+        if (data) {
+            return { ...DEFAULT_SETTINGS, ...data };
+        }
+        return DEFAULT_SETTINGS;
+    } catch (error) {
+        console.error('[Settings] Failed to read from KV:', error);
         return DEFAULT_SETTINGS;
     }
 }
 
-// 설정 파일 쓰기
+// 설정 저장
 export async function saveSettings(settings: Partial<Settings>): Promise<void> {
-    const current = await getSettings();
-    const newSettings = { ...current, ...settings };
+    const kvClient = getKV();
+    
+    if (!kvClient) {
+        throw new Error('KV not configured. Please set KV_REST_API_URL and KV_REST_API_TOKEN environment variables.');
+    }
 
-    const dir = path.dirname(SETTINGS_FILE);
-    await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(SETTINGS_FILE, JSON.stringify(newSettings, null, 2), 'utf-8');
+    try {
+        const current = await getSettings();
+        const newSettings = { ...current, ...settings };
+        await kvClient.set(SETTINGS_KEY, newSettings);
+    } catch (error) {
+        console.error('[Settings] Failed to save to KV:', error);
+        throw error;
+    }
 }

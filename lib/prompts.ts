@@ -1,9 +1,6 @@
-import { promises as fs } from 'fs';
-import path from 'path';
+import { getSettings, DEFAULT_SETTINGS } from './settings';
 
-const SETTINGS_FILE = path.join(process.cwd(), 'data', 'settings.json');
-
-// 기본 시스템 프롬프트
+// 기본 시스템 프롬프트 (RAG용)
 export const DEFAULT_SYSTEM_PROMPT = `당신은 업로드된 문서를 기반으로 답변하는 전문 AI 어시스턴트입니다.
 
 ## 핵심 지침
@@ -21,17 +18,12 @@ export const DEFAULT_SYSTEM_PROMPT = `당신은 업로드된 문서를 기반으
 - 확실하지 않은 정보는 추측하지 않습니다.
 - 문서에 없는 내용을 지어내지 않습니다.`;
 
-interface Settings {
-    systemPrompt: string;
-}
-
-// 시스템 프롬프트 가져오기
+// 시스템 프롬프트 가져오기 (KV에서 조회)
 export async function getSystemPrompt(): Promise<string> {
     try {
-        const data = await fs.readFile(SETTINGS_FILE, 'utf-8');
-        const settings: Settings = JSON.parse(data);
-        return settings.systemPrompt || DEFAULT_SYSTEM_PROMPT;
+        const settings = await getSettings();
+        return settings.systemPrompt || DEFAULT_SETTINGS.systemPrompt;
     } catch {
-        return DEFAULT_SYSTEM_PROMPT;
+        return DEFAULT_SETTINGS.systemPrompt;
     }
 }

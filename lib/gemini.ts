@@ -2,7 +2,7 @@ import { GoogleGenAI } from '@google/genai';
 import { getSettings, DEFAULT_MODEL } from '@/lib/settings';
 
 // Gemini API 클라이언트 인스턴스
-export const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+export const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY || '' });
 
 export { DEFAULT_MODEL };
 
